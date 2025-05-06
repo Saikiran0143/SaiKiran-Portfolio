@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUICore
 
+// MARK: - HOME
+
 struct IosApp: Identifiable {
    var id = UUID()
    var title: String
@@ -18,23 +20,50 @@ struct IosApp: Identifiable {
 
 let IosAppData = [
     IosApp(title: "Build an app with SwiftUI & UIKit",
-          image: "Illustration1",
+          image: "swiftUIKit",
           color: Color("background3"),
           shadowColor: Color("backgroundShadow3")),
     IosApp(title: "Design and animate your UI",
-          image: "Illustration2",
+          image: "designUI",
           color: Color("background4"),
           shadowColor: Color("backgroundShadow4")),
     IosApp(title: "Integrate real-world REST APIs",
-          image: "Illustration3",
+          image: "restApi",
           color: Color("background7"),
           shadowColor: Color(hue: 0.677, saturation: 0.701, brightness: 0.788, opacity: 0.5)),
-    IosApp(title: "Deploy apps to TestFlight & Firebase",
-          image: "Illustration4",
+    IosApp(title: "Deploy apps to TestFlight",
+          image: "testFlight",
           color: Color("background8"),
           shadowColor: Color(hue: 0.677, saturation: 0.701, brightness: 0.788, opacity: 0.5)),
-    IosApp(title: "Architect apps with MVVM & MVI & VIPER",
-          image: "Illustration5",
+    IosApp(title: "Architect apps with MVVM, MVC & VIPER",
+          image: "architecture",
           color: Color("background9"),
           shadowColor: Color(hue: 0.677, saturation: 0.701, brightness: 0.788, opacity: 0.5)),
+]
+
+// MARK: - Menu
+
+struct Menu: Identifiable {
+    var id = UUID()
+    var title: String
+    var icon: String
+}
+
+let menuData = [
+    Menu(title: "My Projects", icon: "folder"),
+    Menu(title: "Skills", icon: "hammer.fill"),
+    Menu(title: "Experience", icon: "briefcase.fill"),
+    Menu(title: "LinkedIn", icon: "link"),
+    Menu(title: "GitHub", icon: "chevron.left.slash.chevron.right")
+]
+
+// MARK: - Skills
+
+let skillData = [
+    Menu(title: "Swift", icon: "swift"),
+    Menu(title: "UIKit", icon: "uikit"),
+    Menu(title: "CoreData", icon: "coreData"),
+    Menu(title: "Alamofire", icon: "alamofire"),
+    Menu(title: "Firebase", icon: "fireBase"),
+    Menu(title: "MapKit", icon: "mapKit")
 ]

@@ -11,17 +11,58 @@ struct Home: View {
     
     @State var show = false
     @State var showProfile = false
+    @State var showProjectScreen: Bool = false
+    @State var showSkillsScreen: Bool = false
     
     var body: some View {
         
-        VStack(spacing: 0){
-            HStack {
-                MenuButton(show: $show)
-                   .offset(x: -40)
-                    Spacer()
+        NavigationStack {
+            ZStack(alignment: .top) {
+                HomeList()
+                    .blur(radius: show ? 10 : 0)
+                HStack {
+                    MenuButton(show: $show)
+                        Spacer()
+                    MenuRight(show: $show)
+                        .offset(x: 30)
+                }
+                .offset(x: -40)
+                MenuView(show: $show) { selectedItem in
+                    print("\(selectedItem)")
+                    handleMenuSelect(selectedItem: selectedItem)
+                }
+                navigations()
             }
+        }
+    }
+    
+    private func navigations() -> some View {
+        VStack{
+        }
+        .navigationDestination(isPresented: $showProjectScreen) {
             
-            HomeList()
+        }
+        .navigationDestination(isPresented: $showSkillsScreen) {
+            SkillsView(showSkills: $showSkillsScreen)
+        }
+    }
+    
+    private func handleMenuSelect(selectedItem: String) {
+        switch(selectedItem) {
+        case "My Projects" :
+            break
+        case "Skills" :
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                showSkillsScreen = true
+            }
+        case "Experience" :
+            break
+        case "LinkedIn" :
+            break
+        case "GitHub" :
+            break
+        default :
+            break
         }
     }
 }
@@ -62,7 +103,6 @@ struct HomeList: View {
                                       shadowColor: item.shadowColor)
                               .rotation3DEffect(Angle(degrees:
                                  Double(geometry.frame(in: .global).minX - 30) / -40), axis: (x: 0, y: 10.0, z: 0))
-                              .sheet(isPresented: self.$showContent) { ContentView() }
                         }
                         .frame(width: 246, height: 360)
                      }
@@ -73,9 +113,7 @@ struct HomeList: View {
                .padding(.bottom, 70)
                Spacer()
             }
-//            CertificateRow()
          }
-//         .padding(.top, -40)
          
       }
    }
@@ -84,10 +122,10 @@ struct HomeList: View {
 
 struct CourseView: View {
 
-   var title = "Build an app with SwiftUI"
-   var image = "Illustration1"
-   var color = Color("background3")
-   var shadowColor = Color("backgroundShadow3")
+    var title: String
+    var image: String
+    var color: Color
+    var shadowColor: Color
 
    var body: some View {
     VStack(alignment: .leading) {
@@ -119,7 +157,10 @@ struct MenuButton: View {
 
    var body: some View {
       return ZStack(alignment: .topLeading) {
-         Button(action: { self.show.toggle() }) {
+          Button(action: {
+              self.show.toggle()
+              print("Hello")
+          }) {
             HStack {
                Spacer()
 

@@ -11,13 +11,13 @@ import SwiftUI
 struct RootView: View {
     var body: some View {
         TabView {
-            Home()
-                .tabItem {
-                    Image("IconHome")
-                    Text("Home")
-                }
-                .tag(1)
-            
+            NavigationStack {
+                Home()
+            }
+            .tabItem {
+               
+            }
+            .tag(1)
         }
         .edgesIgnoringSafeArea(.top)
     }
