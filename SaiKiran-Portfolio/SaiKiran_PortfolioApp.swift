@@ -11,7 +11,7 @@ import SwiftUI
 struct SaiKiran_PortfolioApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Home()
         }
     }
 }
