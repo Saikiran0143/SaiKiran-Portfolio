@@ -133,8 +133,7 @@ struct CourseView: View {
             .font(.title)
             .fontWeight(.bold)
             .foregroundColor(.white)
-            .padding(30)
-            .lineLimit(4)
+            .padding(20)
 
          Spacer()
 
