@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct ProjectDetailsView: View {
+    let project: Project
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    ProjectDetailsView()
+    if let data = myProjectsList.first {
+        ProjectDetailsView(project: data)
+    }
 }

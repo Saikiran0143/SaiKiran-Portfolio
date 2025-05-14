@@ -7,6 +7,67 @@
 
 import SwiftUI
 
+
+struct ProjectWorkView: View {
+
+    @Environment(\.presentationMode) var popScreen
+    @State var openProjectDetails: Bool = false
+    @State private var selectedProject: Project? = nil
+    
+    var body: some View {
+        VStack {
+            HStack {
+                backButtonView
+                Text("My Projects")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: -20) {
+                    ForEach(myProjectsList) { project in
+                        MyProjectCardView(projectDetails: project)
+                            .onTapGesture {
+                                selectedProject = project
+                                openProjectDetails = true
+                                // see zomato ui to open details page
+                            }
+                    }
+                }
+            }
+            navigation()
+        }
+    }
+    
+    private var backButtonView: some View {
+        Button(action: {
+            popScreen.wrappedValue.dismiss()
+        }) {
+            Image(.back)
+                .resizable()
+                .frame(width: 38, height: 38)
+        }
+    }
+    
+    private func navigation() -> some View {
+        VStack {
+        }
+        .navigationDestination(isPresented: $openProjectDetails) {
+            if let selectedProject {
+                ProjectDetailsView(project: selectedProject)
+            } else {
+                Text("No project selected.")
+            }
+        }
+    }
+}
+
+#Preview {
+    ProjectWorkView()
+}
+
+
 struct ProjectsListView: View {
     let projects: [Project] = myProjectsList
 
@@ -55,10 +116,6 @@ struct ProjectCardView: View {
             .shadow(radius: 2)
         }
     }
-}
-
-#Preview {
-    ProjectsListView()
 }
 
 struct ProjectDetailView: View {

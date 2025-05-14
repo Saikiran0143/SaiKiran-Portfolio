@@ -7,15 +7,17 @@
 
 import SwiftUI
 
-struct PopeyesCardView: View {
+struct MyProjectCardView: View {
+    let projectDetails: Project
+    
     var body: some View {
         VStack(spacing: 0) {
             // MARK: - Top Image Section
             ZStack(alignment: .topLeading) {
-                Image(.fireBase)
+                Image(projectDetails.imageName)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(height: 220)
+                    .frame(height: 180)
                     .clipped()
                     .cornerRadius(30, corners: [.topLeft, .topRight])
 //                    .overlay(topLeftLabel, alignment: .topLeading)
@@ -41,64 +43,11 @@ struct PopeyesCardView: View {
     }
 
     // MARK: - Overlays
-    private var topLeftLabel: some View {
-        HStack(spacing: 4) {
-            Text("Popeyes Signature Fri…")
-                .lineLimit(1)
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.white)
-                .truncationMode(.tail)
-
-            Text("· ₹119")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(.white)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 6)
-        .background(Color(red: 58/255, green: 31/255, blue: 10/255))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.top, 16)
-        .padding(.leading, 16)
-    }
-
-    private var topRightIcons: some View {
-        HStack(spacing: 24) {
-            Image(systemName: "bookmark")
-            Image(systemName: "eye.slash")
-        }
-        .font(.system(size: 28))
-        .foregroundColor(.white)
-        .padding(.top, 16)
-        .padding(.trailing, 16)
-    }
-
-    private var bottomLeftInfo: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "clock")
-            Text("35–40 mins")
-            Text("·")
-            Text("1.2 km")
-        }
-        .font(.system(size: 18))
-        .foregroundColor(Color(white: 0.8))
-        .padding(.leading, 16)
-        .padding(.bottom, 12)
-    }
-
-    private var bottomRightDots: some View {
-        HStack(spacing: 6) {
-            ForEach(0..<3) { _ in Circle().fill(Color.white.opacity(0.4)).frame(width: 10, height: 10) }
-            Capsule().fill(Color.white).frame(width: 32, height: 10)
-            ForEach(0..<5) { _ in Circle().fill(Color.white.opacity(0.4)).frame(width: 10, height: 10) }
-        }
-        .padding(.trailing, 16)
-        .padding(.bottom, 12)
-    }
 
     // MARK: - Bottom Content
     private var titleRow: some View {
         HStack {
-            Text("Popeyes")
+            Text(projectDetails.title)
                 .font(.system(size: 32, weight: .heavy))
                 .foregroundColor(.white)
 
@@ -118,9 +67,13 @@ struct PopeyesCardView: View {
     }
 
     private var badgesRow: some View {
-        HStack(spacing: 12) {
-            capsuleLabel("Swift")
-            capsuleLabel("SwiftUI")
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(projectDetails.techStack, id: \.self) { framework in
+                    capsuleLabel(framework)
+                }
+            }
+            .padding(.horizontal, 16)
         }
     }
 
@@ -173,6 +126,65 @@ fileprivate struct RoundedCorner: Shape {
 // MARK: - Preview
 struct PopeyesCardView_Previews: PreviewProvider {
     static var previews: some View {
-        PopeyesCardView()
+        if let data = myProjectsList.first {
+            MyProjectCardView(projectDetails: data )
+        }
+    }
+}
+
+// MARK: - not yet used
+extension MyProjectCardView {
+    private var topLeftLabel: some View {
+        HStack(spacing: 4) {
+            Text("Popeyes Signature Fri…")
+                .lineLimit(1)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.white)
+                .truncationMode(.tail)
+
+            Text("· ₹119")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.white)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(Color(red: 58/255, green: 31/255, blue: 10/255))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(.top, 16)
+        .padding(.leading, 16)
+    }
+
+    private var topRightIcons: some View {
+        HStack(spacing: 24) {
+            Image(systemName: "bookmark")
+            Image(systemName: "eye.slash")
+        }
+        .font(.system(size: 28))
+        .foregroundColor(.white)
+        .padding(.top, 16)
+        .padding(.trailing, 16)
+    }
+
+    private var bottomLeftInfo: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "clock")
+            Text("35–40 mins")
+            Text("·")
+            Text("1.2 km")
+        }
+        .font(.system(size: 18))
+        .foregroundColor(Color(white: 0.8))
+        .padding(.leading, 16)
+        .padding(.bottom, 12)
+    }
+
+    private var bottomRightDots: some View {
+        HStack(spacing: 6) {
+            ForEach(0..<3) { _ in Circle().fill(Color.white.opacity(0.4)).frame(width: 10, height: 10) }
+            Capsule().fill(Color.white).frame(width: 32, height: 10)
+            ForEach(0..<5) { _ in Circle().fill(Color.white.opacity(0.4)).frame(width: 10, height: 10) }
+        }
+        .padding(.trailing, 16)
+        .padding(.bottom, 12)
     }
 }

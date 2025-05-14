@@ -14,6 +14,7 @@ struct Home: View {
     @State var showProjectScreen: Bool = false
     @State var showSkillsScreen: Bool = false
     @State var showLindelnScreen: Bool = false
+    @State var showProjectsScreen: Bool = false
     
     var body: some View {
         
@@ -41,9 +42,6 @@ struct Home: View {
     
     private func navigations() -> some View {
         VStack {}
-            .navigationDestination(isPresented: $showProjectScreen) {
-             
-            }
             .navigationDestination(isPresented: $showSkillsScreen) {
                 SkillsView()
                     .navigationBarHidden(true)
@@ -52,12 +50,18 @@ struct Home: View {
                 LinkedInProfileView()
                     .navigationBarHidden(true)
             }
+            .navigationDestination(isPresented: $showProjectsScreen) {
+                ProjectWorkView()
+                    .navigationBarHidden(true)
+            }
     }
     
     private func handleMenuSelect(selectedItem: String) {
         switch(selectedItem) {
         case "My Projects" :
-            break
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                showProjectsScreen = true
+            }
         case "Skills" :
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 showSkillsScreen = true
