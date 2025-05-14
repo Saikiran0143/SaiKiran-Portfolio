@@ -61,6 +61,7 @@ let menuData = [
 
 let skillData = [
     Menu(title: "Swift", icon: "swift"),
+    Menu(title: "SwiftUI", icon: "swift"),
     Menu(title: "UIKit", icon: "uikit"),
     Menu(title: "CoreData", icon: "coreData"),
     Menu(title: "Alamofire", icon: "alamofire"),

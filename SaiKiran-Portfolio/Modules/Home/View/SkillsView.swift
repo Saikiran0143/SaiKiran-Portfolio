@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SkillsView: View {
     
-    @Binding var showSkills: Bool
+    @Environment(\.presentationMode) var popScreen
     
     let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -31,13 +31,12 @@ struct SkillsView: View {
             .padding(.horizontal, 16)
         }
         .background(Color.background)
-        .navigationBarHidden(true)
     }
     
     private func backButtonView() -> some View {
         HStack(spacing: 16) {
             Button(action: {
-                showSkills = false
+                popScreen.wrappedValue.dismiss()
             }) {
                 HStack {
                     Image(.back)
@@ -57,7 +56,7 @@ struct SkillsView: View {
 }
 
 #Preview {
-    SkillsView(showSkills: .constant(true))
+    SkillsView()
 }
 
 struct skillsCard: View {
@@ -71,7 +70,7 @@ struct skillsCard: View {
                 Image(image)
                     .resizable()
                     .renderingMode(.template)
-                    .foregroundColor(.skillDarkMode)
+                    .foregroundColor( title == "SwiftUI" ? .blue : .skillDarkMode)
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 150, height: 100)
                     .offset(y: 40)
