@@ -13,6 +13,7 @@ struct Home: View {
     @State var showProfile = false
     @State var showProjectScreen: Bool = false
     @State var showSkillsScreen: Bool = false
+    @State var showLindelnScreen: Bool = false
     
     var body: some View {
         
@@ -34,17 +35,23 @@ struct Home: View {
                 navigations()
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .padding(0)
     }
     
     private func navigations() -> some View {
-        VStack{
-        }
-        .navigationDestination(isPresented: $showProjectScreen) {
-            
-        }
-        .navigationDestination(isPresented: $showSkillsScreen) {
-            SkillsView(showSkills: $showSkillsScreen)
-        }
+        VStack {}
+            .navigationDestination(isPresented: $showProjectScreen) {
+             
+            }
+            .navigationDestination(isPresented: $showSkillsScreen) {
+                SkillsView()
+                    .navigationBarHidden(true)
+            }
+            .navigationDestination(isPresented: $showLindelnScreen) {
+                LinkedInProfileView()
+                    .navigationBarHidden(true)
+            }
     }
     
     private func handleMenuSelect(selectedItem: String) {
@@ -58,6 +65,9 @@ struct Home: View {
         case "Experience" :
             break
         case "LinkedIn" :
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                showLindelnScreen = true
+            }
             break
         case "GitHub" :
             break
@@ -73,7 +83,7 @@ struct Home: View {
 
 struct HomeList: View {
 
-   var courses = IosAppData
+   var items = IosAppData
    @State var showContent = false
 
    var body: some View {
@@ -94,7 +104,7 @@ struct HomeList: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                HStack(spacing: 30.0) {
-                  ForEach(courses) { item in
+                  ForEach(items) { item in
                      Button(action: { self.showContent.toggle() }) {
                         GeometryReader { geometry in
                            CourseView(title: item.title,
