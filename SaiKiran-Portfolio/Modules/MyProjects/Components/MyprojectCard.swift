@@ -9,12 +9,11 @@ import SwiftUI
 
 struct MyProjectCardView: View {
     let projectDetails: Project
-    
     var body: some View {
         VStack(spacing: 0) {
             // MARK: - Top Image Section
-            ZStack(alignment: .topLeading) {
-                Image(projectDetails.imageName)
+            
+            Image(projectDetails.imageName.first ?? "")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(height: 180)
@@ -24,7 +23,7 @@ struct MyProjectCardView: View {
 //                    .overlay(topRightIcons, alignment: .topTrailing)
 //                    .overlay(bottomLeftInfo, alignment: .bottomLeading)
 //                    .overlay(bottomRightDots, alignment: .bottomTrailing)
-            }
+            
 
             // MARK: - Bottom Info Section
             VStack(alignment: .leading, spacing: 16) {
@@ -75,10 +74,11 @@ struct MyProjectCardView: View {
             }
             .padding(.horizontal, 16)
         }
+        .frame(height: 50)
     }
 
     private func capsuleLabel(_ text: String) -> some View {
-        Label(text, systemImage: "checkmark")
+        Label(text, systemImage: "")
             .font(.system(size: 18))
             .foregroundColor(Color(white: 0.7))
             .padding(.horizontal, 16)
@@ -103,13 +103,13 @@ struct MyProjectCardView: View {
 }
 
 // MARK: - Corner Radius Utility
-fileprivate extension View {
+ extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
     }
 }
 
-fileprivate struct RoundedCorner: Shape {
+ struct RoundedCorner: Shape {
     var radius: CGFloat = 0
     var corners: UIRectCorner = .allCorners
 

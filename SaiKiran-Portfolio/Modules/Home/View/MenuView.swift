@@ -71,25 +71,28 @@ struct MenuRow: View {
     }
 }
 
-struct MenuRight: View {
-
-   @Binding var show: Bool
-   @State var showUpdate = false
-
-   var body: some View {
-      return ZStack(alignment: .topTrailing) {
-         HStack {
-            Button(action: { self.show.toggle() }) {
-               CircleButton(icon: "person.crop.circle")
+struct MyProfileBellMenuView: View {
+    
+    var didTap: ((String) -> Void) = {_ in }
+    var body: some View {
+        return ZStack(alignment: .topTrailing) {
+            HStack {
+                Button(action: {
+                    didTap("MyProfile")
+                }
+                ) {
+                    CircleButton(icon: "person.crop.circle")
+                }
+                Button(action: {
+                    // bell
+                }) {
+                    CircleButton(icon: "bell")
+                    
+                }
             }
-            Button(action: { self.showUpdate.toggle() }) {
-               CircleButton(icon: "bell")
-                  
-            }
-         }
-         Spacer()
-      }
-   }
+            Spacer()
+        }
+    }
 }
 
 struct CircleButton: View {

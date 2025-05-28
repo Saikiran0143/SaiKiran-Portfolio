@@ -11,64 +11,64 @@ struct ExperienceView: View {
     
     @State var show = false
     @State var viewState = CGSize.zero
-    let experience1: String = " I worked as an iOS Developer where I developed CricDost, a real-time cricket scoring app in UIKit"
-    
-    let experience2: String = " Working as iOS Developer Intern, in Frnd app a voice based social and dating platform, involves developing features using SwiftUI, and enhancing the overall app experience."
+    let experience: [Experience] = experiences
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         ZStack {
-            
-            TitleView()
+            header
                 .blur(radius: show ? 20 : 0)
-                .animation(.default)
+                .animation(.default, value: show)
             
-//            CardBottomView()
-//                .blur(radius: show ? 20 : 0)
-//                .animation(.default)
-            
-            experienceCard(<#T##Experience#>)
-                .blur(radius: show ? 20 : 0)
-                .animation(.default)
             ZStack {
-                CardView(company: "Xcel Corp", description: experience1)
-                    .background(show ? Color.red : Color("background9"))
+                experienceCard(experiences.first!)
+                    .background(show ? Color.clear : Color("background9"))
                     .cornerRadius(10)
                     .shadow(radius: 20)
-                    .offset(x: 0, y: show ? -400 : -40)
+                    .offset(x: show ? -70 : 0, y: show ? -355 : -40)
                     .scaleEffect(0.85)
                     .rotationEffect(Angle(degrees: show ? 15 : 0))
                     .blendMode(.hardLight)
-                    .animation(.easeInOut(duration: 0.6))
                     .offset(x: viewState.width, y: viewState.height)
+                    .animation(.easeInOut(duration: 0.6), value: show)
+                    .animation(.easeInOut(duration: 0.6), value: viewState)
                 
-                CardView(company: "Frnd", description: experience2)
-                    .background(show ? Color("background5") : Color("background8"))
+                experienceCard(experience.last!)
+                    .background(show ? Color.clear : Color("background8"))
                     .cornerRadius(10)
                     .shadow(radius: 20)
-                    .offset(x: 0, y: show ? -200 : -20)
+                    .offset(x: show ? -20 : 0, y: show ? -150 : -20)
                     .scaleEffect(0.9)
                     .rotationEffect(Angle(degrees: show ? 10 : 0))
                     .blendMode(.hardLight)
-                    .animation(.easeInOut(duration: 0.4))
                     .offset(x: viewState.width, y: viewState.height)
+                    .animation(.easeInOut(duration: 0.4), value: show)
+                    .animation(.easeInOut(duration: 0.4), value: viewState)
                 
-                ExperienceCardView()
-                    .offset(x: viewState.width, y: viewState.height)
+                experienceRevealCard()
+                    .offset(x: viewState.width, y: show ? viewState.height + 50 : viewState.height)
                     .scaleEffect(0.95)
                     .rotationEffect(Angle(degrees: show ? 10 : 0))
-                    .animation(.spring())
+                    .animation(.spring(), value: show)
+                    .animation(.spring(), value: viewState)
                     .onTapGesture {
-                        self.show.toggle()
+                        withAnimation {
+                            self.show.toggle()
+                        }
                     }
                     .gesture(
                         DragGesture()
                             .onChanged { value in
                                 self.viewState = value.translation
-                                self.show = true
+                                withAnimation {
+                                    self.show = true
+                                }
                             }
                             .onEnded { _ in
-                                self.viewState = CGSize.zero
-                                self.show = false
+                                withAnimation {
+                                    self.viewState = .zero
+                                    self.show = false
+                                }
                             }
                     )
             }
@@ -76,81 +76,46 @@ struct ExperienceView: View {
         }
     }
     
-    
-    private func experienceCard(_ exp: Experience) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(exp.role)
-                        .font(.headline)
-                        .foregroundColor(.white)
+}
 
-                    Text(exp.company)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
+extension ExperienceView {
+    
+    private var header: some View {
+        VStack (spacing: 50){
+            HStack {
+                backButtonView()
+                Text("Work Experience")
+                    .font(.title)
+                    .fontWeight(.heavy)
+                
                 Spacer()
-                Text(exp.duration)
-                    .font(.caption)
-                    .foregroundColor(.gray)
             }
-
-            Text(exp.description)
-                .font(.body)
-                .foregroundColor(.white)
-
-            HStack {
-                ForEach(exp.techStack, id: \.self) { tech in
-                    Text(tech)
-                        .font(.caption2)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.pink.opacity(0.7))
-                        .clipShape(Capsule())
+            Image("hurry")
+            
+            Spacer()
+        }.padding()
+    }
+    
+    private func backButtonView() -> some View {
+        HStack(spacing: 16) {
+            Button(action: {
+                presentationMode.wrappedValue.dismiss()
+            }) {
+                HStack {
+                    Image(.back)
+                        .resizable()
+                        .frame(width: 40, height: 40)
                 }
             }
         }
-        .padding()
-        .background(Color(red: 30/255, green: 30/255, blue: 36/255))
-        .cornerRadius(15)
-        .shadow(radius: 4)
+        .cornerRadius(40)
     }
-}
-
-#Preview {
-    ExperienceView()
-    //    ExperienceCardView()
-}
-
-struct CardView: View {
-    var company: String = "Frnd"
-    var description: String = "Frnd"
     
-    var body: some View {
-        VStack {
-            Text("\(company)")
-                .font(.title3)
-                .fontWeight(.bold)
-                .foregroundColor(Color.black)
-                .padding(.top)
-            
-            Text("\(description)")
-                .font(.pallyVariable(size: 18))
-        }
-        .frame(width: 340.0, height: 220.0)
-    }
-}
-
-struct ExperienceCardView: View {
-    
-    var item = Certificate(title: "UI Design", image: "leaf", width: 340, height: 220)
-    
-    var body: some View {
+    private func experienceRevealCard() -> some View {
         VStack {
             HStack {
                 VStack(alignment: .center, spacing: 10) {
-                    Text("My Experience")
+                    Text("iOS Developer")
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(Color("accent"))
@@ -170,50 +135,62 @@ struct ExperienceCardView: View {
             .padding(.horizontal)
             Spacer()
             
-            Image(item.image)
+            Image("leaf")
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                 .offset(y: 50)
         }
-        .frame(width: CGFloat(item.width), height: CGFloat(item.height))
+        .frame(width: CGFloat(340), height: CGFloat(220))
         .background(Color.black)
         .cornerRadius(10)
         .shadow(radius: 10)
     }
-}
-
-struct TitleView: View {
-    var body: some View {
-        VStack (spacing: 50){
+    
+    private func experienceCard(_ exp: Experience) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Work Experience")
-                    .font(.title)
-                    .fontWeight(.heavy)
-                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(exp.role)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    
+                    Text(exp.company)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
                 Spacer()
+                Text(exp.duration)
+                    .font(.caption)
+                    .foregroundColor(.gray)
             }
-            Image("hurry")
             
-            Spacer()
-        }.padding()
+            Text(exp.description)
+                .font(.body)
+                .foregroundColor(.white)
+            
+            ScrollView(.horizontal) {
+                HStack(spacing: 16) {
+                    ForEach(exp.techStack, id: \.self) { tech in
+                        Text(tech)
+                            .font(.caption2)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(Color.pink.opacity(0.7))
+                            .clipShape(Capsule())
+                    }
+                }
+            }
+            .frame(height: 50)
+        }
+        .padding()
+        .background(Color(red: 30/255, green: 30/255, blue: 36/255))
+        .cornerRadius(15)
+        .shadow(radius: 4)
+        .frame(width: 340.0, height: 220.0)
     }
 }
 
-struct CardBottomView: View {
-    var body: some View {
-        VStack(spacing: 20.0) {
-            Spacer()
-            Rectangle()
-                .frame(width: 60, height: 6)
-                .cornerRadius(3.0)
-                .opacity(0.1)
-            
-            Text("iOS Developer Intern @Frnd")
-                .lineLimit(nil)
-        }
-        .frame(minWidth: 0, maxWidth: .infinity)
-        .padding()
-        .padding(.horizontal)
-        .cornerRadius(30)
-        .shadow(radius: 20)
-    }
+
+#Preview {
+    ExperienceView()
 }

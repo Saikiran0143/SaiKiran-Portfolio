@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SkillsView: View {
     
-    @Environment(\.presentationMode) var popScreen
+    @Environment(\.presentationMode) var presentationMode
     
     let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -17,18 +17,22 @@ struct SkillsView: View {
     ]
 
     var body: some View {
-        ScrollView {
-            HStack{
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
                 backButtonView()
                 Spacer()
             }
             .padding(.leading, 30)
-            LazyVGrid(columns: columns, spacing: 8) {
-                ForEach(skillData) { skill in
-                    skillsCard(title: skill.title, image: skill.icon)
+            .padding(.bottom, 8)
+
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 8) {
+                    ForEach(skillData) { skill in
+                        skillsCard(title: skill.title, image: skill.icon)
+                    }
                 }
+                .padding(.horizontal, 16)
             }
-            .padding(.horizontal, 16)
         }
         .background(Color.background)
     }
@@ -36,7 +40,7 @@ struct SkillsView: View {
     private func backButtonView() -> some View {
         HStack(spacing: 16) {
             Button(action: {
-                popScreen.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
             }) {
                 HStack {
                     Image(.back)

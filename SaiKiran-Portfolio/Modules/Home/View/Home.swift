@@ -11,10 +11,21 @@ struct Home: View {
     
     @State var show = false
     @State var showProfile = false
-    @State var showProjectScreen: Bool = false
-    @State var showSkillsScreen: Bool = false
-    @State var showLindelnScreen: Bool = false
-    @State var showProjectsScreen: Bool = false
+    @State var showProjectView: Bool = false
+    @State var showSkillsView: Bool = false
+    @State var showLindelnView: Bool = false
+    @State var showProjectsView: Bool = false
+    @State var showExperienceView: Bool = false
+    @State var showMyProfile: Bool = false
+    
+    /**
+        refactor all code in profile
+        remove raw strings,
+        add background colour in extension file an use
+         use enums to handle taps in menu and all
+     optimize code, more structs used
+        
+     */
     
     var body: some View {
         
@@ -25,7 +36,13 @@ struct Home: View {
                 HStack {
                     MenuButton(show: $show)
                         Spacer()
-                    MenuRight(show: $show)
+                    MyProfileBellMenuView { tap in
+                        if tap == "MyProfile" {
+                            showMyProfile = true
+                        } else {
+                            // bell
+                        }
+                    }
                         .offset(x: 30)
                 }
                 .offset(x: -40)
@@ -42,16 +59,23 @@ struct Home: View {
     
     private func navigations() -> some View {
         VStack {}
-            .navigationDestination(isPresented: $showSkillsScreen) {
+            .navigationDestination(isPresented: $showSkillsView) {
                 SkillsView()
                     .navigationBarHidden(true)
             }
-            .navigationDestination(isPresented: $showLindelnScreen) {
+            .navigationDestination(isPresented: $showLindelnView) {
                 LinkedInProfileView()
                     .navigationBarHidden(true)
             }
-            .navigationDestination(isPresented: $showProjectsScreen) {
+            .navigationDestination(isPresented: $showProjectsView) {
                 ProjectWorkView()
+                    .navigationBarHidden(true)
+            }
+            .navigationDestination(isPresented: $showExperienceView) {
+                ExperienceView()
+                    .navigationBarHidden(true)
+            }.navigationDestination(isPresented: $showMyProfile) {
+                MyProfileView()
                     .navigationBarHidden(true)
             }
     }
@@ -60,17 +84,20 @@ struct Home: View {
         switch(selectedItem) {
         case "My Projects" :
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                showProjectsScreen = true
+                showProjectsView = true
             }
         case "Skills" :
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                showSkillsScreen = true
+                showSkillsView = true
             }
         case "Experience" :
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                showExperienceView = true
+            }
             break
         case "LinkedIn" :
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                showLindelnScreen = true
+                showLindelnView = true
             }
             break
         case "GitHub" :
